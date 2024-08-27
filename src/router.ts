@@ -11,6 +11,8 @@ import PlaygroundRoutes from './views/PlaygroundRoutes.vue';
 import Legals from './views/Legals.vue';
 import AdminUsersList from './views/AdminUsersList.vue';
 import Soon from './views/Soon.vue';
+import MissingPrivilege from './views/MissingPrivilege.vue';
+import Locked from './views/Locked.vue';
 
 export enum RouteName {
     Home = 'home',
@@ -24,6 +26,7 @@ export enum RouteName {
     AdminUpdateUser = 'admin-update-user',
     Expiration = 'expiration',
     MissingPrivilege = 'missing-privilege',
+    Locked = 'locked',
     Page404 = 'page-404',
     Soon = 'soon',
 }
@@ -92,6 +95,18 @@ const routes = [
         props: true,
     },
     {
+        path: '/non-accessible',
+        name: RouteName.MissingPrivilege,
+        component: MissingPrivilege,
+        meta: { unauthenticated: true },
+    },
+    {
+        path: '/compte-verrouille',
+        name: RouteName.Locked,
+        component: Locked,
+        meta: { unauthenticated: true },
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: RouteName.Page404,
         component: Page404,
@@ -117,6 +132,11 @@ router.beforeEach((to, _from, next) => {
             name: RouteName.Connection,
             query: { redirect: to.name?.toString() },
         });
+        return;
+    }
+
+    if (!to.meta.unauthenticated && user?.locked) {
+        next({ name: RouteName.Locked });
         return;
     }
 

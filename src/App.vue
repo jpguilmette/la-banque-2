@@ -115,7 +115,7 @@ onUnmounted(() => {
         bottom: 0;
         right: 0;
         padding: 10px;
-        background-color: #f46524;
+        background-color: #f4652450;
         color: white;
     }
 

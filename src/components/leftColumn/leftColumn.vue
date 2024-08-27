@@ -22,10 +22,9 @@ import { RouteName } from './../../router';
             </div>
 
             <p class="left-column__text-intro">
-                Texte d'intro ... lorem ipsum dolor sit amet, consectetur
-                adipiscing elit. Sed laoreet odio nec lectus consequat, sed
-                cursus nibh mattis. Etiam porttitor felis tellus, id convallis
-                neque porta non.
+                Bienvenue dans la nouvelle application de La Banque. Connectez
+                vous à votre compte pour en profiter au maximum. Vous pourrez y
+                consulter votre compte.
             </p>
             <div class="left-column__divider"></div>
             <Navigation />
