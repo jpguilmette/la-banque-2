@@ -1,6 +1,7 @@
 {
   "hosting": {
-    "public": "public",
+    "site": "la-banque-officiel",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",

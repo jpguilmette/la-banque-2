@@ -2,7 +2,7 @@
 import { computed, defineProps, withDefaults } from 'vue';
 import { User } from '../../models/User';
 import { RouteName } from '../../router';
-import lockSvg from '../../assets/icons/lock.svg?raw';
+import lockSvg from '../../assets/lock.svg?raw';
 import { useLaBanqueStore } from '../../store/store';
 
 const props = withDefaults(

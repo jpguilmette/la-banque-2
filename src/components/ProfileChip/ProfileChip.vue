@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
 import { useCurrentUser } from '../../composables/currentUser';
 import { useDisconnect } from '../../composables/disconnected';
 import { LA_BANQUE_CURRENT_USER_EVENT_NAME } from '../../models/User';
@@ -33,15 +33,18 @@ onUnmounted(() => {
         handleCurrentUserEvent as EventListener
     );
 });
+
+const photo = computed(
+    () =>
+        new URL(`/src/assets/${currentUser.value?.photo}.png`, import.meta.url)
+            .href
+);
 </script>
 
 <template>
     <div class="profile-chip">
         <template v-if="currentUser">
-            <img
-                :src="`/src/assets/icons/emoji/${currentUser.photo}.png`"
-                class="profile-chip__photo"
-            />
+            <img :src="photo" class="profile-chip__photo" />
             <RouterLink
                 :to="{
                     name: RouteName.Profile,

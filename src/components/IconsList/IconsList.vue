@@ -11,6 +11,9 @@ const iconSelected = defineModel('icon', {
 const emit = defineEmits<{
     'icon-selected': [icon: string];
 }>();
+
+const iconUrl = (icon: string) =>
+    new URL(`/src/assets/${icon}.png`, import.meta.url).href;
 </script>
 
 <template>
@@ -42,7 +45,7 @@ const emit = defineEmits<{
                         :class="icon"
                     >
                         <img
-                            :src="`/src/assets/icons/emoji/${icon}.png`"
+                            :src="iconUrl(icon)"
                             class="icons-list__icon-img"
                             :class="{
                                 selected: icon === iconSelected,

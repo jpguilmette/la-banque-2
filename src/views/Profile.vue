@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { NotificationType } from './../components/Notification/Notification.def';
 import { useLaBanqueStore } from '../store/store';
 import Loading from './../components/Loading/Loading.vue';
@@ -84,6 +84,12 @@ const updateUser = async (user: User) => {
         window.dispatchEvent(customEvent);
     }
 };
+
+const photo = computed(
+    () =>
+        new URL(`/src/assets/${currentUser.value?.photo}.png`, import.meta.url)
+            .href
+);
 </script>
 
 <template>
@@ -108,10 +114,7 @@ const updateUser = async (user: User) => {
             <div class="field-group profile__photo">
                 <label for="name">Changer votre image de profil: </label>
                 <button type="button" @click.prevent="toggleIconsList">
-                    <img
-                        :src="`/src/assets/icons/emoji/${currentUser?.photo}.png`"
-                        alt="Image du profil"
-                    />
+                    <img :src="photo" alt="Image du profil" />
                 </button>
             </div>
             <IconsList

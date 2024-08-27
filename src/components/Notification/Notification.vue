@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { defineModel, defineProps, withDefaults, computed, watch } from 'vue';
 import { NotificationType } from './Notification.def';
-import SvgClose from './../../assets/icons/close.svg?raw';
-import SvgSuccess from './../../assets/icons/success.svg?raw';
-import SvgInfo from './../../assets/icons/info.svg?raw';
-import SvgWarning from './../../assets/icons/warning.svg?raw';
-import SvgError from './../../assets/icons/error.svg?raw';
+import SvgClose from './../../assets/close.svg?raw';
+import SvgSuccess from './../../assets/success.svg?raw';
+import SvgInfo from './../../assets/info.svg?raw';
+import SvgWarning from './../../assets/warning.svg?raw';
+import SvgError from './../../assets/error.svg?raw';
 
 const open = defineModel('open', { type: Boolean, default: true });
 

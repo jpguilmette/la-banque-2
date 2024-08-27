@@ -14,7 +14,7 @@ import { RouteName } from './../../router';
                 >
                     <img
                         class="left-column__logo"
-                        src="/src/assets/icons/bank.png"
+                        src="/src/assets/bank.png"
                         alt="Logo de La Banque"
                     />
                     <h1 class="left-column__text">La banque</h1>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouteName } from '../router';
-import lockSvg from './../assets/icons/lock.svg?raw';
+import lockSvg from './../assets/lock.svg?raw';
 </script>
 
 <template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import SvgMessenger from './../../assets/icons/messenger.svg?raw';
-import SvgTeams from './../../assets/icons/teams.svg?raw';
-import SvgGoogleChat from './../../assets/icons/google-chat.svg?raw';
-import SvgOutlook from './../../assets/icons/outlook.svg?raw';
+import SvgMessenger from './../../assets/messenger.svg?raw';
+import SvgTeams from './../../assets/teams.svg?raw';
+import SvgGoogleChat from './../../assets/google-chat.svg?raw';
+import SvgOutlook from './../../assets/outlook.svg?raw';
 import { RouteName } from './../../router';
 </script>
 

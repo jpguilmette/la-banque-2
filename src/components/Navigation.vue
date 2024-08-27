@@ -3,8 +3,8 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useCurrentUser } from '../composables/currentUser';
 import { LA_BANQUE_CURRENT_USER_EVENT_NAME } from '../models/User';
 import { RouteName } from './../router';
-import SvgBars from './../assets/icons/bars.svg?raw';
-import SvgClose from './../assets/icons/close.svg?raw';
+import SvgBars from './../assets/bars.svg?raw';
+import SvgClose from './../assets/close.svg?raw';
 import Contacts from './Contacts/Contacts.vue';
 
 const { currentUser, handleCurrentUserEvent } = useCurrentUser();
@@ -35,7 +35,11 @@ onUnmounted(() => {
 
 const uid = computed(() => currentUser.value?.uid ?? 'NOT_FOUND');
 const admin = computed(() => currentUser.value?.admin ?? false);
-const photo = computed(() => currentUser.value?.photo);
+const photo = computed(
+    () =>
+        new URL(`/src/assets/${currentUser.value?.photo}.png`, import.meta.url)
+            .href
+);
 const menuIcon = computed(() => (navOpen.value ? SvgClose : SvgBars));
 </script>
 
@@ -43,7 +47,7 @@ const menuIcon = computed(() => (navOpen.value ? SvgClose : SvgBars));
     <img
         v-if="currentUser"
         :class="{ open: navOpen }"
-        :src="`/src/assets/icons/emoji/${photo}.png`"
+        :src="photo"
         class="navigation__photo"
     />
     <a
@@ -56,10 +60,7 @@ const menuIcon = computed(() => (navOpen.value ? SvgClose : SvgBars));
         <div class="navigation__profile">
             <template v-if="currentUser">
                 <div class="navigation__profile-identity">
-                    <img
-                        :src="`/src/assets/icons/emoji/${currentUser.photo}.png`"
-                        class="navigation__profile-photo"
-                    />
+                    <img :src="photo" class="navigation__profile-photo" />
                     <RouterLink
                         :to="{
                             name: RouteName.Profile,
