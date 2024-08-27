@@ -9,6 +9,9 @@ import {
     LaBanqueError,
     LaBanqueErrorEventDetail,
 } from '../models/LaBanqueError';
+import { RouteName } from '../router';
+import { useRouter } from 'vue-router';
+import { LaBanqueDomain } from '../app';
 
 enum ValidationState {
     mint,
@@ -29,6 +32,7 @@ const locked = ref(false);
 const lockedDirty = ref(false);
 
 const store = useLaBanqueStore();
+const router = useRouter();
 
 const props = defineProps<{
     uid: string;
@@ -136,6 +140,10 @@ const setNameValidationState = () => {
 const setAmountValidationState = () => {
     return !isNaN(+amount.value);
 };
+
+const cancel = () => {
+    router.push({ name: RouteName.AdminCreateUser });
+};
 </script>
 
 <template>
@@ -143,7 +151,10 @@ const setAmountValidationState = () => {
     <Loading v-if="!editUser" />
 
     <form v-else @submit.prevent="updateUser">
-        <div>{{ editUser?.photo }}{{ editUser?.username }}@labanque.com</div>
+        <div
+            >{{ editUser?.photo }}{{ editUser?.username
+            }}{{ LaBanqueDomain }}</div
+        >
         <div class="field-group">
             <label for="name">Nom affiché</label>
             <input
@@ -213,7 +224,7 @@ const setAmountValidationState = () => {
         </div>
         <div class="buttons-group">
             <button type="submit">Enregistrer</button>
-            <button type="reset">Annuler</button>
+            <button type="reset" @click="cancel">Annuler</button>
         </div>
     </form>
 </template>

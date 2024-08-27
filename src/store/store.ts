@@ -4,9 +4,6 @@ import {
     QuerySnapshot,
     addDoc,
     collection,
-    deleteDoc,
-    doc,
-    getDoc,
     getDocs,
     query,
     updateDoc,
@@ -20,7 +17,6 @@ import { LaBanqueError } from '../models/LaBanqueError';
 
 export const useLaBanqueStore = defineStore('labanque', () => {
     const users = ref<User[]>([]);
-    const currentUser = ref<User | null>(null);
     const usersCharging = ref(false);
     const usersLoaded = ref(false);
 
@@ -53,7 +49,7 @@ export const useLaBanqueStore = defineStore('labanque', () => {
             const querySnapshot: QuerySnapshot = await getDocs(
                 query(collection(firestore, 'users'), where('uid', '==', uid))
             );
-            return querySnapshot.docs[0].data() as User;
+            return querySnapshot.docs[0]?.data() as User;
         } catch (e) {
             if (e instanceof Error) {
                 throw new LaBanqueError(e, 'get-user');
@@ -126,7 +122,6 @@ export const useLaBanqueStore = defineStore('labanque', () => {
 
     return {
         users,
-        currentUser,
         usersCharging,
         usersLoaded,
         getUsers,

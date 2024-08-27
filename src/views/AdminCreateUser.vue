@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import UsersList from './../components/UsersList/UsersList.vue';
 import { NotificationType } from './../components/Notification/Notification.def';
 import { useLaBanqueStore } from '../store/store';
 import { User } from '../models/User';
@@ -10,6 +9,9 @@ import {
     LaBanqueError,
     LaBanqueErrorEventDetail,
 } from '../models/LaBanqueError';
+import { useRouter } from 'vue-router';
+import { RouteName } from '../router';
+import { LaBanqueDomain } from '../app';
 
 enum ValidationState {
     mint,
@@ -28,6 +30,7 @@ const administrator = ref(false);
 const merchant = ref(false);
 
 const store = useLaBanqueStore();
+const router = useRouter();
 
 const createUser = async () => {
     try {
@@ -53,7 +56,7 @@ const createUser = async () => {
             const auth = getAuth();
             const userCredential = await createUserWithEmailAndPassword(
                 auth,
-                `${username.value}@labanque.com`,
+                `${username.value}${LaBanqueDomain}`,
                 password.value
             );
 
@@ -61,7 +64,7 @@ const createUser = async () => {
                 uid: userCredential.user.uid,
                 name: name.value,
                 username: username.value,
-                photo: '',
+                photo: 'smiley-empty',
                 admin: administrator.value,
                 merchant: merchant.value,
                 amount: 0,
@@ -144,10 +147,15 @@ const setPasswordValidationState = () => {
         passwordValidationState.value = ValidationState.valid;
     }
 };
+
+const cancel = () => {
+    router.push({ name: RouteName.Home });
+};
 </script>
 
 <template>
-    <h2>Création d'un utilisateur</h2>
+    <h2>Ajouter un utilisateur</h2>
+
     <form @submit.prevent="createUser">
         <div class="field-group">
             <label for="name">Nom affiché</label>
@@ -180,7 +188,7 @@ const setPasswordValidationState = () => {
                     }"
                     @change="setUsernameValidationState"
                 />
-                @labanque.com
+                {{ LaBanqueDomain }}
             </div>
             <div class="info"
                 >Un seul mot, sans espace, sans accent et sans caratères
@@ -225,10 +233,9 @@ const setPasswordValidationState = () => {
         </div>
         <div class="buttons-group">
             <button type="submit">Créer utilisateur</button>
-            <button type="reset">Annuler</button>
+            <button type="reset" @click="cancel">Annuler</button>
         </div>
     </form>
-    <UsersList :users="store.users" />
 </template>
 
 <style scoped>

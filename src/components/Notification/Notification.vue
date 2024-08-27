@@ -14,7 +14,6 @@ let timeout: number;
 const props = withDefaults(
     defineProps<{
         type?: NotificationType;
-        open: boolean;
     }>(),
     { type: NotificationType.Success }
 );
@@ -50,7 +49,7 @@ watch(open, (newValue) => {
 </script>
 
 <template>
-    <div v-if="props.open" :class="`notification ${props.type}`">
+    <div v-if="open" :class="`notification ${props.type}`">
         <div class="notification__icon" v-html="notificationIcon"></div>
         <div class="notification__content"><slot /></div>
         <button
@@ -64,9 +63,9 @@ watch(open, (newValue) => {
 <style lang="scss" scoped>
 .notification {
     position: fixed;
-    top: 8px;
-    left: 8px;
-    right: 8px;
+    top: 16px;
+    left: 16px;
+    right: 16px;
     display: flex;
     padding: 8px;
     border-radius: 5px;
@@ -75,14 +74,13 @@ watch(open, (newValue) => {
     transition: 300ms;
 
     &.success {
-        color: #0ad406;
-        border-color: #24f10675;
-        background-color: #07954250;
+        color: #011801;
+        border-color: #24f42475;
+        background-color: #24f42450;
         box-shadow: 0 0 2px #42be65;
 
         &:hover {
-            color: #011801;
-            background-color: #079542;
+            background-color: #24f424;
         }
     }
 
@@ -98,26 +96,24 @@ watch(open, (newValue) => {
     }
 
     &.warning {
-        color: #f1c21b;
-        border-color: #f18e06cf;
-        background-color: #dc800129;
+        color: #181801;
+        border-color: #f4f424cf;
+        background-color: #f4f42470;
         box-shadow: 0 0 2px #ffb103;
 
         &:hover {
-            color: #443708;
-            background-color: #dc8001;
+            background-color: #f4f424;
         }
     }
 
     &.error {
-        color: #ff0303;
-        border-color: #f10606cf;
-        background-color: #dc110129;
+        color: #fff;
+        border-color: #f42424cf;
+        background-color: #f4242470;
         box-shadow: 0 0 2px #ff0303;
 
         &:hover {
-            color: #fd9a9a;
-            background-color: #dc1101;
+            background-color: #f42424;
         }
     }
 

@@ -1,20 +1,22 @@
 <template>
-    <h1>La banque</h1>
-    <p> <strong>Current route path:</strong> {{ $route.fullPath }} </p>
-    <Navigation />
+    <LeftColumn />
+    <div class="content">
+        <ProfileChip class="content__profile-chip" />
 
-    <main style="border: 1px solid #fff">
-        <RouterView />
-    </main>
+        <main class="content__body">
+            <RouterView />
+        </main>
 
-    <Notification :type="notificationType" v-model:open="notificationOpen">
-        {{ notificationContent }}
-    </Notification>
+        <Notification :type="notificationType" v-model:open="notificationOpen">
+            {{ notificationContent }}
+        </Notification>
+
+        <div class="content__version">Version: Alpha</div>
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, onUnmounted } from 'vue';
-import Navigation from './components/Navigation.vue';
 import { useLaBanqueStore } from './store/store';
 import Notification from './components/Notification/Notification.vue';
 import {
@@ -23,16 +25,21 @@ import {
     LaBanqueErrorEventDetail,
 } from './models/LaBanqueError';
 import { NotificationType } from './components/Notification/Notification.def';
+import { useDisconnect } from './composables/disconnected';
+import ProfileChip from './components/ProfileChip/ProfileChip.vue';
+import LeftColumn from './components/leftColumn/leftColumn.vue';
+import { RouteName } from './router';
+import { useRouter } from 'vue-router';
 
 const store = useLaBanqueStore();
-
-// const utilisateur = sessionStorage.getItem('utilisateur');
+const disconnect = useDisconnect();
+const router = useRouter();
 
 const notificationOpen = ref(false);
 const notificationType = ref(NotificationType.Info);
 const notificationContent = ref('');
 
-const handleCustomEvent = (
+const handleErrorEvent = (
     event: CustomEvent<LaBanqueErrorEventDetail>
 ): void => {
     notificationType.value = event.detail.type;
@@ -40,19 +47,34 @@ const handleCustomEvent = (
     notificationOpen.value = true;
 };
 
-// if (!utilisateur) {
-//     // router.push({name: NomRoute.Connexion})
-// }
+const inactivityTime = () => {
+    const resetTimer = () => {
+        clearTimeout(timeoutId);
+        timeoutId = window.setTimeout(() => {
+            const user = sessionStorage.getItem('user');
+            if (user) {
+                disconnect();
+                router.push({ name: RouteName.Expiration });
+            }
+        }, 600000);
+    };
+
+    let timeoutId: number;
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeydown = resetTimer;
+};
 
 onMounted(async () => {
     window.addEventListener(
         LA_BANQUE_ERROR_EVENT_NAME,
-        handleCustomEvent as EventListener,
+        handleErrorEvent as EventListener,
         false
     );
 
     try {
         await store.getUsers();
+        inactivityTime();
     } catch (error) {
         const customEvent = new CustomEvent<LaBanqueErrorEventDetail>(
             LA_BANQUE_ERROR_EVENT_NAME,
@@ -72,22 +94,40 @@ onMounted(async () => {
 onUnmounted(() => {
     window.removeEventListener(
         LA_BANQUE_ERROR_EVENT_NAME,
-        handleCustomEvent as EventListener
+        handleErrorEvent as EventListener
     );
 });
 </script>
 
-<style scoped>
-.logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-}
-.logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-    filter: drop-shadow(0 0 2em #42b883aa);
+<style lang="scss" scoped>
+.content {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+
+    &__body {
+        display: block;
+        padding: 50px;
+    }
+
+    &__version {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        padding: 10px;
+        background-color: #f46524;
+        color: white;
+    }
+
+    @media screen and (max-width: 991px) {
+        overflow: visible;
+        &__profile-chip {
+            display: none;
+        }
+
+        &__body {
+            padding: 10px;
+        }
+    }
 }
 </style>

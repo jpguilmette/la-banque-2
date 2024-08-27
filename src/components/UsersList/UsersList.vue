@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineProps, withDefaults } from 'vue';
 import { User } from '../../models/User';
-import { NomRoute } from '../../router';
+import { RouteName } from '../../router';
 import lockSvg from '../../assets/icons/lock.svg?raw';
 import { useLaBanqueStore } from '../../store/store';
 
@@ -50,7 +50,7 @@ const desactivateUser = async (
                 <td>
                     <RouterLink
                         :to="{
-                            name: NomRoute.AdminUpdateUser,
+                            name: RouteName.AdminUpdateUser,
                             params: { uid: user.uid },
                         }"
                     >
@@ -60,7 +60,7 @@ const desactivateUser = async (
                 <td
                     ><RouterLink
                         :to="{
-                            name: NomRoute.AdminUpdateUser,
+                            name: RouteName.AdminUpdateUser,
                             params: { uid: user.uid },
                         }"
                     >
@@ -86,6 +86,7 @@ const desactivateUser = async (
                     ><button
                         type="button"
                         class="users-list__desactived"
+                        :class="{ 'users-list__desactived--on': user.locked }"
                         @click="
                             desactivateUser(
                                 user.uid,
@@ -104,12 +105,30 @@ const desactivateUser = async (
 <style lang="scss" scoped>
 .users-list {
     width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #143642;
+    border-left: 1px solid #143642;
+
+    th {
+        border-bottom: 1px double #143642;
+        border-right: 1px solid #143642;
+    }
+
+    td {
+        text-align: center;
+        border-right: 1px solid #143642;
+        border-bottom: 1px solid #143642;
+    }
 
     &__desactived {
         width: 24px;
         height: 24px;
         padding: 2px;
         color: #fff;
+    }
+
+    &__desactived--on {
+        background-color: #f00;
     }
 }
 </style>
