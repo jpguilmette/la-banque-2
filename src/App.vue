@@ -56,7 +56,7 @@ const inactivityTime = () => {
                 disconnect();
                 router.push({ name: RouteName.Expiration });
             }
-        }, 600000);
+        }, 60000);
     };
 
     let timeoutId: number;
