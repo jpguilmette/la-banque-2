@@ -26,6 +26,8 @@ const usernameValidationState = ref(ValidationState.mint);
 const usernameAlreadyUsed = ref(false);
 const password = ref('');
 const passwordValidationState = ref(ValidationState.mint);
+const copypassword = ref('');
+const copypasswordValidationState = ref(ValidationState.mint);
 const administrator = ref(false);
 const merchant = ref(false);
 
@@ -72,6 +74,24 @@ const createUser = async () => {
             };
 
             await store.addUser(user);
+
+            name.value = '';
+            username.value = '';
+            password.value = '';
+            copypassword.value = '';
+            administrator.value = false;
+            merchant.value = false;
+
+            const customEvent = new CustomEvent<LaBanqueErrorEventDetail>(
+                LA_BANQUE_ERROR_EVENT_NAME,
+                {
+                    detail: {
+                        type: NotificationType.Success,
+                        content: `L'utilisateur ${user.name} à été ajouté`,
+                    },
+                }
+            );
+            window.dispatchEvent(customEvent);
         }
     } catch (error) {
         const errorCode = (error as LaBanqueError).code;
@@ -114,11 +134,15 @@ const validateUserInfo = () => {
     if (passwordValidationState.value === ValidationState.mint) {
         passwordValidationState.value = ValidationState.invalid;
     }
+    if (copypasswordValidationState.value === ValidationState.mint) {
+        copypasswordValidationState.value = ValidationState.invalid;
+    }
 
     return (
         nameValidationState.value === ValidationState.valid &&
         usernameValidationState.value === ValidationState.valid &&
-        passwordValidationState.value === ValidationState.valid
+        passwordValidationState.value === ValidationState.valid &&
+        copypasswordValidationState.value === ValidationState.valid
     );
 };
 
@@ -145,6 +169,17 @@ const setPasswordValidationState = () => {
         passwordValidationState.value = ValidationState.invalid;
     } else {
         passwordValidationState.value = ValidationState.valid;
+    }
+};
+
+const setCopyPasswordValidationState = () => {
+    if (copypassword.value === '') {
+        copypasswordValidationState.value = ValidationState.mint;
+    } else {
+        copypasswordValidationState.value =
+            password.value === copypassword.value
+                ? ValidationState.valid
+                : ValidationState.invalid;
     }
 };
 
@@ -222,6 +257,25 @@ const cancel = () => {
             >
         </div>
         <div class="field-group">
+            <label for="copypassword">Réécrire le mot de passe</label>
+            <input
+                type="password"
+                id="copypassword"
+                v-model="copypassword"
+                :class="{
+                    error:
+                        copypasswordValidationState === ValidationState.invalid,
+                }"
+                @change="setCopyPasswordValidationState"
+            />
+            <div
+                class="error-description"
+                v-if="copypasswordValidationState === ValidationState.invalid"
+            >
+                Vous devez copier exactement le mot de passe.
+            </div>
+        </div>
+        <div class="field-group">
             <label for="administrator"
                 >L'utilisateur est un administrateur?</label
             >
@@ -238,25 +292,4 @@ const cancel = () => {
     </form>
 </template>
 
-<style scoped>
-.field-group,
-.buttons-group {
-    margin-top: 1rem;
-}
-
-label {
-    display: block;
-}
-
-.info {
-    font-size: 0.75rem;
-}
-
-.error {
-    background-color: #c00;
-}
-
-.error-description {
-    color: #c00;
-}
-</style>
+<style scoped></style>

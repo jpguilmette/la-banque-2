@@ -102,7 +102,7 @@ const connection = async (event: Event) => {
     <h2>Se connecter</h2>
 
     <form @submit="connection">
-        <div>
+        <div class="field-group">
             <label for="username">Nom d'utilisateur</label>
             <input
                 type="text"
@@ -111,7 +111,7 @@ const connection = async (event: Event) => {
                 autocomplete="on"
             />
         </div>
-        <div>
+        <div class="field-group">
             <label for="password">Mot de passe</label>
             <input
                 type="password"
@@ -120,7 +120,7 @@ const connection = async (event: Event) => {
                 autocomplete="on"
             />
         </div>
-        <div>
+        <div class="buttons-group">
             <button type="submit">Connexion</button>
         </div>
     </form>

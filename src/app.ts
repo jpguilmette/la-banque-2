@@ -1,1 +1,1 @@
-export const LaBanqueDomain = '@labanque.com';
+export const LaBanqueDomain = '@la-banque-officiel.web.app';

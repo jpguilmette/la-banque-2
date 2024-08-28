@@ -6,8 +6,13 @@ import { RouteName } from './../router';
 import SvgBars from './../assets/bars.svg?raw';
 import SvgClose from './../assets/close.svg?raw';
 import Contacts from './Contacts/Contacts.vue';
+import { useDisconnect } from './../composables/disconnected';
+import { useRouter } from 'vue-router';
 
 const { currentUser, handleCurrentUserEvent } = useCurrentUser();
+const router = useRouter();
+const disconnect = useDisconnect();
+
 const navOpen = ref(false);
 
 const onClick = () => {
@@ -32,6 +37,11 @@ onUnmounted(() => {
         handleCurrentUserEvent as EventListener
     );
 });
+const onDisconnect = () => {
+    navOpen.value = false;
+    disconnect();
+    router.push({ name: RouteName.Home });
+};
 
 const uid = computed(() => currentUser.value?.uid ?? 'NOT_FOUND');
 const admin = computed(() => currentUser.value?.admin ?? false);
@@ -73,10 +83,7 @@ const menuIcon = computed(() => (navOpen.value ? SvgClose : SvgBars));
                     </RouterLink>
                 </div>
                 <a
-                    @click.prevent="
-                        navOpen = false;
-                        onClick;
-                    "
+                    @click.prevent="onDisconnect"
                     class="navigation__profile-disconnect"
                 >
                     Déconnexion

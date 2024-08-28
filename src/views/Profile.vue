@@ -11,6 +11,7 @@ import {
 import { useCurrentUser } from '../composables/currentUser';
 import IconsList from './../components/IconsList/IconsList.vue';
 import { LA_BANQUE_CURRENT_USER_EVENT_NAME, User } from '../models/User';
+import { LaBanqueDomain } from './../app';
 
 const noUserFound = ref(false);
 const iconsListOpen = ref(false);
@@ -57,6 +58,7 @@ const changeIcon = (icon: string) => {
 
 const updateUser = async (user: User) => {
     try {
+        sessionStorage.setItem('user', JSON.stringify(user));
         await store.updateUser(user);
 
         const customEvent = new CustomEvent<User>(
@@ -103,7 +105,9 @@ const photo = computed(
     </div>
     <template v-else>
         <h2>Bonjour {{ currentUser?.name }}</h2>
-        <p class="profile__username">[{{ currentUser?.username }}]</p>
+        <p class="profile__username"
+            >[{{ currentUser?.username }}{{ LaBanqueDomain }}]</p
+        >
         <div class="profile__amount">
             <label class="profile__amount-label" for="amount">
                 Dans votre compte, vous avez présentement :

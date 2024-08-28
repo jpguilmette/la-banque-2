@@ -74,6 +74,40 @@ button:focus-visible {
   min-height: 100%;
 }
 
+.field-group,
+.buttons-group {
+    margin-top: 1rem;
+}
+
+label {
+    display: block;
+}
+
+input {
+  padding: 6px;
+  font-size: 1em;
+  border: 1px solid #6e635e;
+  border-radius: 6px;
+}
+
+.info {
+    font-size: 0.75rem;
+}
+
+.error {
+    background-color: #f42424;
+}
+
+
+.error-description {
+    color: #f42424;
+}
+
+.buttons-group {
+  display: flex;
+  gap: 1em;
+}
+
 @media screen and (max-width: 991px) {
   body {
     overflow: visible;
